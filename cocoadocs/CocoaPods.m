@@ -127,6 +127,10 @@ static NSString* const XAR_EXECUTABLE = @"/usr/bin/xar";
         NSMenuItem* createPodspecItem = [[NSMenuItem alloc] initWithTitle:@"Create/Edit Podspec"
                                                                    action:@selector(createPodspecFile)
                                                             keyEquivalent:@""];
+        
+        NSMenuItem* cleanCache = [[NSMenuItem alloc] initWithTitle:@"Clean cache (all)"
+                                                            action:@selector(cleanCacheAll)
+                                                     keyEquivalent:@""];
 
         [[self bundle] loadNibNamed:@"PodPathView" owner:self topLevelObjects:nil];
         self.pathItem = [[NSMenuItem alloc] initWithTitle:@"Set POD_PATH"
@@ -149,6 +153,7 @@ static NSString* const XAR_EXECUTABLE = @"/usr/bin/xar";
         [createPodfileItem setTarget:self];
         [createPodspecItem setTarget:self];
         [self.pathItem setTarget:self];
+        [cleanCache setTarget:self];
 
         [[cocoaPodsMenu submenu] addItem:self.installPodsItem];
         [[cocoaPodsMenu submenu] addItem:self.outdatedPodsItem];
@@ -158,6 +163,7 @@ static NSString* const XAR_EXECUTABLE = @"/usr/bin/xar";
         [[cocoaPodsMenu submenu] addItem:createPodspecItem];
         [[cocoaPodsMenu submenu] addItem:[NSMenuItem separatorItem]];
         [[cocoaPodsMenu submenu] addItem:self.installDocsItem];
+        [[cocoaPodsMenu submenu] addItem:cleanCache];
         [[cocoaPodsMenu submenu] addItem:[NSMenuItem separatorItem]];
         [[cocoaPodsMenu submenu] addItem:self.pathItem];
 
@@ -299,6 +305,11 @@ static NSString* const XAR_EXECUTABLE = @"/usr/bin/xar";
 - (void)checkForOutdatedPods
 {
     [self runPodWithArguments:@[ @"outdated" ]];
+}
+
+- (void)cleanCacheAll
+{
+    [self runPodWithArguments:@[ @"cache", @"clean", @"--all" ]];
 }
 
 - (void)updatePods
